@@ -1,18 +1,10 @@
 {
-  "version": 2,
   "cleanUrls": false,
   "trailingSlash": false,
-  "builds": [
-    { "src": "index.html", "use": "@vercel/static" },
-    { "src": "admin.html", "use": "@vercel/static" },
-    { "src": "styles.css", "use": "@vercel/static" },
-    { "src": "admin.css", "use": "@vercel/static" },
-    { "src": "assets/(.*)", "use": "@vercel/static" },
-    { "src": "*.json", "use": "@vercel/static" }
-  ],
-  "routes": [
-    { "src": "/admin/?", "dest": "/admin.html" },
-    { "handle": "filesystem" },
-    { "src": "/", "dest": "/index.html" }
+  "rewrites": [
+    {
+      "source": "/admin",
+      "destination": "/admin.html"
+    }
   ]
 }
