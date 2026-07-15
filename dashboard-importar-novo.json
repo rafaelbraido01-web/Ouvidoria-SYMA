@@ -1,0 +1,1853 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "description": "Layout reorganizado em resumo, backlog operacional, alertas e tabelas de apoio.",
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "liveNow": true,
+  "panels": [
+    {
+      "datasource": {
+        "type": "mysql",
+        "uid": "fegij8monp5ogb"
+      },
+      "gridPos": {
+        "x": 10,
+        "y": 0,
+        "w": 4,
+        "h": 4
+      },
+      "id": 39,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {
+          "valueSize": 32
+        },
+        "textMode": "value",
+        "wideLayout": true
+      },
+      "targets": [
+        {
+          "dataset": "mesquita_publico",
+          "datasource": {
+            "type": "mysql",
+            "uid": "fegij8monp5ogb"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "select count(distinct o.codigo) as total from mesquita_vendas.cad_orca o left outer join mesquita_publico.prod_clie pc on (pc.codigo = o.COD_PROD_OS) and (pc.cliente=o.cliente) left outer join mesquita_publico.cad_clie c on c.codigo = o.CLIENTE left outer join mesquita_publico.cad_status s on s.codigo = o.status left outer join mesquita_publico.cad_vend cd on o.usuario = cd.codigo left outer join mesquita_publico.cad_vend cd2 on o.vendedor = cd2.codigo where o.data_cadastro between \"${Entre}\" and \"${e}\" and o.situacao='EA' and o.tipo=3 and ${sqldepartamentos};",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Total de OS abertas",
+      "type": "stat",
+      "fieldConfig": {
+        "defaults": {
+          "noValue": "0",
+          "decimals": 0,
+          "unit": "none",
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "dark-green"
+          }
+        },
+        "overrides": []
+      }
+    },
+    {
+      "datasource": {
+        "type": "mysql",
+        "uid": "fegij8monp5ogb"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "dark-green"
+          },
+          "decimals": 2,
+          "fieldMinMax": false,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "noValue": "0",
+          "unit": "currencyBRL"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 5,
+        "h": 4
+      },
+      "id": 31,
+      "interval": "5m",
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {
+          "valueSize": 32
+        },
+        "textMode": "value",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.1.4",
+      "targets": [
+        {
+          "dataset": "mesquita_publico",
+          "datasource": {
+            "type": "mysql",
+            "uid": "fegij8monp5ogb"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": " select sum((o.total_servicos)-(desc_serv)) FROM mesquita_vendas.cad_orca o  left outer join mesquita_publico.prod_clie pc on (pc.codigo = o.COD_PROD_OS) and (pc.cliente=o.cliente)  left outer join mesquita_publico.cad_clie c on c.codigo = o.CLIENTE  left outer join mesquita_publico.cad_status s on s.codigo = o.status  left outer join mesquita_publico.cad_vend cd on o.usuario = cd.codigo left outer join mesquita_publico.cad_vend cd2 on o.vendedor = cd2.codigo where o.data_cadastro between \"${Entre}\" and \"${e}\" and (o.situacao=\"EA\") and o.tipo=3 and ${sqldepartamentos};\r\n \r\n",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          },
+          "table": "cad_vend"
+        }
+      ],
+      "type": "stat",
+      "title": "Valor das OS abertas"
+    },
+    {
+      "datasource": {
+        "type": "mysql",
+        "uid": "fegij8monp5ogb"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "dark-green"
+          },
+          "decimals": 2,
+          "fieldMinMax": false,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "currencyBRL",
+          "noValue": "0"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "x": 5,
+        "y": 0,
+        "w": 5,
+        "h": 4
+      },
+      "id": 37,
+      "interval": "5m",
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {
+          "valueSize": 32
+        },
+        "textMode": "value",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.1.4",
+      "targets": [
+        {
+          "dataset": "mesquita_publico",
+          "datasource": {
+            "type": "mysql",
+            "uid": "fegij8monp5ogb"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "select sum((o.total_servicos)-(desc_serv)) FROM mesquita_vendas.cad_orca o left outer join mesquita_publico.prod_clie pc on (pc.codigo = o.COD_PROD_OS) and (pc.cliente=o.cliente) left outer join mesquita_publico.cad_clie c on c.codigo = o.CLIENTE left outer join mesquita_publico.cad_status s on s.codigo = o.status left outer join mesquita_publico.cad_vend cd on o.usuario = cd.codigo left outer join mesquita_publico.cad_vend cd2 on o.vendedor = cd2.codigo where o.data_baixa between \"${Entre}\" and \"${e}\" and o.status=14 and o.situacao in (\"FI\",\"AI\") and o.tipo=3 and ${sqldepartamentos};",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          },
+          "table": "cad_vend"
+        }
+      ],
+      "type": "stat",
+      "title": "Valor das OS baixadas"
+    },
+    {
+      "datasource": {
+        "type": "mysql",
+        "uid": "fegij8monp5ogb"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 19,
+        "w": 24,
+        "h": 7
+      },
+      "id": 15,
+      "options": {
+        "dedupStrategy": "none",
+        "enableLogDetails": true,
+        "prettifyLogMessage": false,
+        "showCommonLabels": false,
+        "showLabels": false,
+        "showTime": false,
+        "sortOrder": "Ascending",
+        "wrapLogMessage": false
+      },
+      "repeat": "Entre",
+      "repeatDirection": "v",
+      "targets": [
+        {
+          "dataset": "mesquita_publico",
+          "datasource": {
+            "type": "mysql",
+            "uid": "fegij8monp5ogb"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "select  concat(ROW_NUMBER() OVER (ORDER BY o.codigo), \"\\tOS: \", o.codigo,\"\\t  Cadastrado: \", o.data_cadastro, \" \\tPrevisao: \", o.previsao_entrega, \"\\t Total Srv: R$ \", o.total_servicos, \" \\tDias de atraso: \",MAX(DATEDIFF(CURDATE(), o.previsao_entrega)), \"\\tTec: \", cd2.apelido, \"\\t Cod.cli: \", o.cliente, \"   \\tNome: \",c.NOME , \"\\t\\t\\t\"),     o.CODIGO OS, concat(o.data_cadastro) CADASTRADO, concat(o.previsao_entrega) PREVISAO, MAX(DATEDIFF(CURDATE(), o.previsao_entrega)) as DIAS_DE_ATRASO, c.nome NOME, o.data_cadastro, pc.descricao EQUIPAMENTO, concat(o.TOTAL_PRODUTOS) TOTAL_PRODUTOS, concat(o.TOTAL_SERVICOS) TOTAL_SERVICOS, cd.apelido ABRIU_OS, cd2.apelido TECNICO, o.status STATUS, o.OBSERVACOES DEFEITO, \" \", o.OBSERVACOES2 SOLUCAO FROM mesquita_vendas.cad_orca o left outer join mesquita_publico.prod_clie pc on (pc.codigo = o.COD_PROD_OS) and (pc.cliente=o.cliente)  left outer join mesquita_publico.cad_clie c on c.codigo = o.CLIENTE  left outer join mesquita_publico.cad_status s on s.codigo = o.status  left outer join mesquita_publico.cad_vend cd on o.usuario = cd.codigo left outer join mesquita_publico.cad_vend cd2 on o.vendedor = cd2.codigo where o.data_cadastro between \"${Entre}\" and \"${e}\" and o.situacao='EA' and o.tipo=3 and o.status=18 and ${sqldepartamentos} group by o.codigo order by o.codigo;",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "OS aguardando aprovação",
+      "type": "logs"
+    },
+    {
+      "datasource": {
+        "type": "mysql",
+        "uid": "fegij8monp5ogb"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "max": 40,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 10
+              },
+              {
+                "color": "red",
+                "value": 20
+              }
+            ]
+          },
+          "unit": "none",
+          "noValue": "0",
+          "decimals": 0
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 4,
+        "w": 4,
+        "h": 4
+      },
+      "id": 1,
+      "interval": "5m",
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {
+          "valueSize": 32
+        },
+        "textMode": "value",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.1.4",
+      "targets": [
+        {
+          "dataset": "mesquita_publico",
+          "datasource": {
+            "type": "mysql",
+            "uid": "fegij8monp5ogb"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": " select count(o.status) FROM mesquita_vendas.cad_orca o  left outer join mesquita_publico.prod_clie pc on (pc.codigo = o.COD_PROD_OS) and (pc.cliente=o.cliente)  left outer join mesquita_publico.cad_clie c on c.codigo = o.CLIENTE  left outer join mesquita_publico.cad_status s on s.codigo = o.status  left outer join mesquita_publico.cad_vend cd on o.usuario = cd.codigo left outer join mesquita_publico.cad_vend cd2 on o.vendedor = cd2.codigo where o.data_cadastro between \"${Entre}\" and \"${e}\" and o.situacao='EA' and o.tipo=3 and o.status=0 and ${sqldepartamentos};\r\n \r\n",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          },
+          "table": "cad_vend"
+        }
+      ],
+      "transparent": true,
+      "type": "stat",
+      "title": "Aguardando Início"
+    },
+    {
+      "datasource": {
+        "type": "mysql",
+        "uid": "fegij8monp5ogb"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "max": 30,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 8
+              },
+              {
+                "color": "red",
+                "value": 15
+              }
+            ]
+          },
+          "unit": "none",
+          "noValue": "0",
+          "decimals": 0
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "x": 4,
+        "y": 4,
+        "w": 4,
+        "h": 4
+      },
+      "id": 4,
+      "interval": "5m",
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {
+          "valueSize": 32
+        },
+        "textMode": "value",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.1.4",
+      "targets": [
+        {
+          "dataset": "mesquita_publico",
+          "datasource": {
+            "type": "mysql",
+            "uid": "fegij8monp5ogb"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": " select    count(o.status) from     mesquita_vendas.cad_orca o left outer join     mesquita_publico.prod_clie pc on     (         pc.codigo = o.COD_PROD_OS) and (         pc.cliente=o.cliente) left outer join     mesquita_publico.cad_clie c on     c.codigo = o.CLIENTE left outer join     mesquita_publico.cad_status s on     s.codigo = o.status left outer join     mesquita_publico.cad_vend cd on     o.usuario = cd.codigo left outer join     mesquita_publico.cad_vend cd2 on     o.vendedor = cd2.codigo where     o.data_cadastro between \"${Entre}\" and \"${e}\" and o.situacao ='EA' and o.tipo     =3 and o.status   =58 and ${sqldepartamentos};",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          },
+          "table": "cad_vend"
+        }
+      ],
+      "transparent": true,
+      "type": "stat",
+      "title": "Aguardando Peça"
+    },
+    {
+      "datasource": {
+        "type": "mysql",
+        "uid": "fegij8monp5ogb"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "max": 50,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 11
+              },
+              {
+                "color": "red",
+                "value": 26
+              }
+            ]
+          },
+          "unit": "none",
+          "noValue": "0",
+          "decimals": 0
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "x": 8,
+        "y": 4,
+        "w": 4,
+        "h": 4
+      },
+      "id": 8,
+      "interval": "5m",
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {
+          "valueSize": 32
+        },
+        "textMode": "value",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.1.4",
+      "targets": [
+        {
+          "dataset": "mesquita_publico",
+          "datasource": {
+            "type": "mysql",
+            "uid": "fegij8monp5ogb"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": " select    count(o.status) from     mesquita_vendas.cad_orca o left outer join     mesquita_publico.prod_clie pc on     (         pc.codigo = o.COD_PROD_OS) and (         pc.cliente=o.cliente) left outer join     mesquita_publico.cad_clie c on     c.codigo = o.CLIENTE left outer join     mesquita_publico.cad_status s on     s.codigo = o.status left outer join     mesquita_publico.cad_vend cd on     o.usuario = cd.codigo left outer join     mesquita_publico.cad_vend cd2 on     o.vendedor = cd2.codigo where     o.data_cadastro between \"${Entre}\" and \"${e}\" and o.situacao ='EA' and o.tipo     =3 and o.status   =18 and ${sqldepartamentos};\r\n \r\n",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          },
+          "table": "cad_vend"
+        }
+      ],
+      "transparent": true,
+      "type": "stat",
+      "title": "Aguardando Aprovação"
+    },
+    {
+      "datasource": {
+        "type": "mysql",
+        "uid": "fegij8monp5ogb"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "max": 15,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 3
+              },
+              {
+                "color": "red",
+                "value": 8
+              }
+            ]
+          },
+          "unit": "none",
+          "noValue": "0",
+          "decimals": 0
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "x": 5,
+        "y": 8,
+        "w": 5,
+        "h": 4
+      },
+      "id": 3,
+      "interval": "5m",
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {
+          "valueSize": 32
+        },
+        "textMode": "value",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.1.4",
+      "targets": [
+        {
+          "dataset": "mesquita_publico",
+          "datasource": {
+            "type": "mysql",
+            "uid": "fegij8monp5ogb"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": " select    count(o.status) from     mesquita_vendas.cad_orca o left outer join     mesquita_publico.prod_clie pc on     (         pc.codigo = o.COD_PROD_OS) and (         pc.cliente=o.cliente) left outer join     mesquita_publico.cad_clie c on     c.codigo = o.CLIENTE left outer join     mesquita_publico.cad_status s on     s.codigo = o.status left outer join     mesquita_publico.cad_vend cd on     o.usuario = cd.codigo left outer join     mesquita_publico.cad_vend cd2 on     o.vendedor = cd2.codigo where o.data_cadastro between \"${Entre}\" and \"${e}\" and o.situacao ='EA' and o.tipo=3 and ${sqldepartamentos} and o.status   =41; \r\n",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          },
+          "table": "cad_vend"
+        }
+      ],
+      "transparent": true,
+      "type": "stat",
+      "title": "Aguardando Orç. Técnico"
+    },
+    {
+      "datasource": {
+        "type": "mysql",
+        "uid": "fegij8monp5ogb"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "max": 20,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 5
+              },
+              {
+                "color": "red",
+                "value": 10
+              }
+            ]
+          },
+          "unit": "none",
+          "noValue": "0",
+          "decimals": 0
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 8,
+        "w": 5,
+        "h": 4
+      },
+      "id": 11,
+      "interval": "5m",
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {
+          "valueSize": 32
+        },
+        "textMode": "value",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.1.4",
+      "targets": [
+        {
+          "dataset": "mesquita_publico",
+          "datasource": {
+            "type": "mysql",
+            "uid": "fegij8monp5ogb"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": " select    count(o.status) from     mesquita_vendas.cad_orca o left outer join     mesquita_publico.prod_clie pc on     (         pc.codigo = o.COD_PROD_OS) and (         pc.cliente=o.cliente) left outer join     mesquita_publico.cad_clie c on     c.codigo = o.CLIENTE left outer join     mesquita_publico.cad_status s on     s.codigo = o.status left outer join     mesquita_publico.cad_vend cd on     o.usuario = cd.codigo left outer join     mesquita_publico.cad_vend cd2 on     o.vendedor = cd2.codigo where     o.data_cadastro between \"${Entre}\" and \"${e}\" and o.situacao ='EA' and o.tipo     =3 and o.status   =80 and ${sqldepartamentos};\r\n \r\n",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          },
+          "table": "cad_vend"
+        }
+      ],
+      "transparent": true,
+      "type": "stat",
+      "title": "Aguardando cliente trazer"
+    },
+    {
+      "datasource": {
+        "type": "mysql",
+        "uid": "fegij8monp5ogb"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "max": 20,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 4
+              },
+              {
+                "color": "red",
+                "value": 8
+              }
+            ]
+          },
+          "unit": "none",
+          "noValue": "0",
+          "decimals": 0
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "x": 20,
+        "y": 4,
+        "w": 4,
+        "h": 4
+      },
+      "id": 5,
+      "interval": "5m",
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {
+          "valueSize": 32
+        },
+        "textMode": "value",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.1.4",
+      "targets": [
+        {
+          "dataset": "mesquita_publico",
+          "datasource": {
+            "type": "mysql",
+            "uid": "fegij8monp5ogb"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": " select    count(o.status) from     mesquita_vendas.cad_orca o left outer join     mesquita_publico.prod_clie pc on     (         pc.codigo = o.COD_PROD_OS) and (         pc.cliente=o.cliente) left outer join     mesquita_publico.cad_clie c on     c.codigo = o.CLIENTE left outer join     mesquita_publico.cad_status s on     s.codigo = o.status left outer join     mesquita_publico.cad_vend cd on     o.usuario = cd.codigo left outer join     mesquita_publico.cad_vend cd2 on     o.vendedor = cd2.codigo where     o.data_cadastro between \"${Entre}\" and \"${e}\" and o.situacao ='EA' and o.tipo     =3 and o.status   =46 and ${sqldepartamentos};\r\n \r\n",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          },
+          "table": "cad_vend"
+        }
+      ],
+      "transparent": true,
+      "type": "stat",
+      "title": "Em reparo de placa"
+    },
+    {
+      "datasource": {
+        "type": "mysql",
+        "uid": "fegij8monp5ogb"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 12,
+        "w": 24,
+        "h": 7
+      },
+      "id": 24,
+      "options": {
+        "dedupStrategy": "none",
+        "enableLogDetails": true,
+        "prettifyLogMessage": false,
+        "showCommonLabels": false,
+        "showLabels": false,
+        "showTime": false,
+        "sortOrder": "Ascending",
+        "wrapLogMessage": false
+      },
+      "targets": [
+        {
+          "dataset": "mesquita_publico",
+          "datasource": {
+            "type": "mysql",
+            "uid": "fegij8monp5ogb"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "select  concat(ROW_NUMBER() OVER (ORDER BY o.codigo), \"\\tOS: \", o.codigo,\"\\t  Cadastrado: \", o.data_cadastro, \" \\tPrevisao: \", o.previsao_entrega, \"\\t Total Srv: R$ \", o.total_servicos, \" \\tDias de atraso: \",MAX(DATEDIFF(CURDATE(), o.previsao_entrega)), \"\\tTec: \", cd2.apelido, \"\\t Cod.cli: \", o.cliente, \"   \\tNome: \",c.NOME , \"\\t\\t\\t\"),     o.CODIGO OS, concat(o.data_cadastro) CADASTRADO, concat(o.previsao_entrega) PREVISAO, MAX(DATEDIFF(CURDATE(), o.previsao_entrega)) as DIAS_DE_ATRASO, c.nome NOME, o.data_cadastro, pc.descricao EQUIPAMENTO, concat(o.TOTAL_PRODUTOS) TOTAL_PRODUTOS, concat(o.TOTAL_SERVICOS) TOTAL_SERVICOS, cd.apelido ABRIU_OS, cd2.apelido TECNICO, o.status STATUS, o.OBSERVACOES DEFEITO, \" \", o.OBSERVACOES2 SOLUCAO FROM mesquita_vendas.cad_orca o left outer join mesquita_publico.prod_clie pc on (pc.codigo = o.COD_PROD_OS) and (pc.cliente=o.cliente)  left outer join mesquita_publico.cad_clie c on c.codigo = o.CLIENTE  left outer join mesquita_publico.cad_status s on s.codigo = o.status  left outer join mesquita_publico.cad_vend cd on o.usuario = cd.codigo left outer join mesquita_publico.cad_vend cd2 on o.vendedor = cd2.codigo where o.tipo = 3 and o.situacao='EA' and o.data_cadastro between \"${Entre}\" and \"${e}\" and o.previsao_entrega IS NOT NULL and o.previsao_entrega < CURDATE() and o.status NOT IN (14, 25) and ${sqldepartamentos} group by o.codigo order by o.previsao_entrega;",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "OS atrasadas",
+      "type": "logs"
+    },
+    {
+      "datasource": {
+        "type": "mysql",
+        "uid": "fegij8monp5ogb"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "max": 40,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 10
+              },
+              {
+                "color": "red",
+                "value": 20
+              }
+            ]
+          },
+          "unit": "none",
+          "noValue": "0",
+          "decimals": 0
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "x": 19,
+        "y": 8,
+        "w": 5,
+        "h": 4
+      },
+      "id": 9,
+      "interval": "5m",
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {
+          "valueSize": 32
+        },
+        "textMode": "value",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.1.4",
+      "targets": [
+        {
+          "dataset": "mesquita_publico",
+          "datasource": {
+            "type": "mysql",
+            "uid": "fegij8monp5ogb"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": " select    count(o.status) from     mesquita_vendas.cad_orca o left outer join     mesquita_publico.prod_clie pc on     (         pc.codigo = o.COD_PROD_OS) and (         pc.cliente=o.cliente) left outer join     mesquita_publico.cad_clie c on     c.codigo = o.CLIENTE left outer join     mesquita_publico.cad_status s on     s.codigo = o.status left outer join     mesquita_publico.cad_vend cd on     o.usuario = cd.codigo left outer join     mesquita_publico.cad_vend cd2 on     o.vendedor = cd2.codigo where     o.data_cadastro between \"${Entre}\" and \"${e}\" and o.situacao ='EA' and o.tipo     =3 and o.status   =11 and ${sqldepartamentos};\r\n \r\n",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          },
+          "table": "cad_vend"
+        }
+      ],
+      "transparent": true,
+      "type": "stat",
+      "title": "Aprovado aguardando andamento"
+    },
+    {
+      "datasource": {
+        "type": "mysql",
+        "uid": "fegij8monp5ogb"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "max": 20,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 5
+              },
+              {
+                "color": "red",
+                "value": 10
+              }
+            ]
+          },
+          "unit": "none",
+          "noValue": "0",
+          "decimals": 0
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "x": 16,
+        "y": 4,
+        "w": 4,
+        "h": 4
+      },
+      "id": 2,
+      "interval": "5m",
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {
+          "valueSize": 32
+        },
+        "textMode": "value",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.1.4",
+      "targets": [
+        {
+          "dataset": "mesquita_publico",
+          "datasource": {
+            "type": "mysql",
+            "uid": "fegij8monp5ogb"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": " select    count(o.status) from     mesquita_vendas.cad_orca o left outer join     mesquita_publico.prod_clie pc on     (         pc.codigo = o.COD_PROD_OS) and (         pc.cliente=o.cliente) left outer join     mesquita_publico.cad_clie c on     c.codigo = o.CLIENTE left outer join     mesquita_publico.cad_status s on     s.codigo = o.status left outer join     mesquita_publico.cad_vend cd on     o.usuario = cd.codigo left outer join     mesquita_publico.cad_vend cd2 on     o.vendedor = cd2.codigo where     o.data_cadastro between \"${Entre}\" and \"${e}\" and o.situacao ='EA' and o.tipo     =3 and o.status   =35 and ${sqldepartamentos};\r\n \r\n",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          },
+          "table": "cad_vend"
+        }
+      ],
+      "transparent": true,
+      "type": "stat",
+      "title": "Em análise"
+    },
+    {
+      "datasource": {
+        "type": "mysql",
+        "uid": "fegij8monp5ogb"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "max": 30,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 8
+              },
+              {
+                "color": "red",
+                "value": 15
+              }
+            ]
+          },
+          "unit": "none",
+          "noValue": "0",
+          "decimals": 0
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 4,
+        "w": 4,
+        "h": 4
+      },
+      "id": 6,
+      "interval": "5m",
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {
+          "valueSize": 32
+        },
+        "textMode": "value",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.1.4",
+      "targets": [
+        {
+          "dataset": "mesquita_publico",
+          "datasource": {
+            "type": "mysql",
+            "uid": "fegij8monp5ogb"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": " select    count(o.status) from     mesquita_vendas.cad_orca o left outer join     mesquita_publico.prod_clie pc on     (         pc.codigo = o.COD_PROD_OS) and (         pc.cliente=o.cliente) left outer join     mesquita_publico.cad_clie c on     c.codigo = o.CLIENTE left outer join     mesquita_publico.cad_status s on     s.codigo = o.status left outer join     mesquita_publico.cad_vend cd on     o.usuario = cd.codigo left outer join     mesquita_publico.cad_vend cd2 on     o.vendedor = cd2.codigo where     o.data_cadastro between \"${Entre}\" and \"${e}\" and o.situacao ='EA' and o.tipo     =3 and o.status=8 and ${sqldepartamentos};\r\n \r\n",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          },
+          "table": "cad_vend"
+        }
+      ],
+      "transparent": true,
+      "type": "stat",
+      "title": "Em execução"
+    },
+    {
+      "datasource": {
+        "type": "mysql",
+        "uid": "fegij8monp5ogb"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "displayName": "Atrasadas",
+          "mappings": [],
+          "max": 100,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 6
+              },
+              {
+                "color": "red",
+                "value": 16
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "x": 14,
+        "y": 0,
+        "w": 5,
+        "h": 4
+      },
+      "id": 25,
+      "interval": "5m",
+      "options": {
+        "minVizHeight": 75,
+        "minVizWidth": 75,
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "sizing": "auto",
+        "text": {}
+      },
+      "pluginVersion": "11.1.4",
+      "targets": [
+        {
+          "dataset": "mesquita_publico",
+          "datasource": {
+            "type": "mysql",
+            "uid": "fegij8monp5ogb"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "select count(*) as total FROM mesquita_vendas.cad_orca o left outer join mesquita_publico.prod_clie pc on (pc.codigo = o.COD_PROD_OS) and (pc.cliente=o.cliente) left outer join mesquita_publico.cad_clie c on c.codigo = o.CLIENTE left outer join mesquita_publico.cad_status s on s.codigo = o.status left outer join mesquita_publico.cad_vend cd on o.usuario = cd.codigo left outer join mesquita_publico.cad_vend cd2 on o.vendedor = cd2.codigo where o.tipo=3 and o.situacao='EA' and o.data_cadastro between \"${Entre}\" and \"${e}\" and o.previsao_entrega IS NOT NULL and o.previsao_entrega < CURDATE() and o.status NOT IN (14,25) and ${sqldepartamentos};",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          },
+          "table": "cad_vend"
+        }
+      ],
+      "transparent": true,
+      "type": "gauge",
+      "title": "OS abertas com previsão vencida"
+    },
+    {
+      "datasource": {
+        "type": "mysql",
+        "uid": "fegij8monp5ogb"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "max": 10,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 1
+              },
+              {
+                "color": "red",
+                "value": 3
+              }
+            ]
+          },
+          "unit": "none",
+          "noValue": "0",
+          "decimals": 0
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "x": 15,
+        "y": 8,
+        "w": 4,
+        "h": 4
+      },
+      "id": 7,
+      "interval": "5m",
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {
+          "valueSize": 32
+        },
+        "textMode": "value",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.1.4",
+      "targets": [
+        {
+          "dataset": "mesquita_publico",
+          "datasource": {
+            "type": "mysql",
+            "uid": "fegij8monp5ogb"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "select count(o.status) from mesquita_vendas.cad_orca o left outer join mesquita_publico.prod_clie pc on (pc.codigo = o.COD_PROD_OS) and (pc.cliente=o.cliente) left outer join mesquita_publico.cad_clie c on c.codigo = o.CLIENTE left outer join mesquita_publico.cad_status s on s.codigo = o.status left outer join mesquita_publico.cad_vend cd on o.usuario = cd.codigo left outer join mesquita_publico.cad_vend cd2 on o.vendedor = cd2.codigo where o.data_cadastro between \"${Entre}\" and \"${e}\" and o.situacao =\"EA\" and o.tipo=3 and o.status=25 and ${sqldepartamentos};",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          },
+          "table": "cad_vend"
+        }
+      ],
+      "transparent": true,
+      "type": "stat",
+      "title": "OS abertas canceladas/não aprovadas"
+    },
+    {
+      "datasource": {
+        "type": "mysql",
+        "uid": "fegij8monp5ogb"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "max": 20,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 5
+              },
+              {
+                "color": "red",
+                "value": 10
+              }
+            ]
+          },
+          "unit": "none",
+          "noValue": "0",
+          "decimals": 0
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "x": 10,
+        "y": 8,
+        "w": 5,
+        "h": 4
+      },
+      "id": 10,
+      "interval": "5m",
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {
+          "valueSize": 32
+        },
+        "textMode": "value",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.1.4",
+      "targets": [
+        {
+          "dataset": "mesquita_publico",
+          "datasource": {
+            "type": "mysql",
+            "uid": "fegij8monp5ogb"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": " select    count(o.status) from     mesquita_vendas.cad_orca o left outer join     mesquita_publico.prod_clie pc on     (         pc.codigo = o.COD_PROD_OS) and (         pc.cliente=o.cliente) left outer join     mesquita_publico.cad_clie c on     c.codigo = o.CLIENTE left outer join     mesquita_publico.cad_status s on     s.codigo = o.status left outer join     mesquita_publico.cad_vend cd on     o.usuario = cd.codigo left outer join     mesquita_publico.cad_vend cd2 on     o.vendedor = cd2.codigo where     o.data_cadastro between \"${Entre}\" and \"${e}\" and (o.situacao =\"EA\") and o.tipo     =3 and o.status   =14 and ${sqldepartamentos};\r\n \r\n",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          },
+          "table": "cad_vend"
+        }
+      ],
+      "transparent": true,
+      "type": "stat",
+      "title": "Concluído técnico ainda em aberto"
+    },
+    {
+      "datasource": {
+        "type": "mysql",
+        "uid": "fegij8monp5ogb"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "dark-green"
+          },
+          "mappings": [],
+          "max": 250,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 120
+              },
+              {
+                "color": "red",
+                "value": 180
+              }
+            ]
+          },
+          "unit": "none",
+          "noValue": "0",
+          "decimals": 0
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "x": 19,
+        "y": 0,
+        "w": 5,
+        "h": 4
+      },
+      "id": 35,
+      "interval": "5m",
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {
+          "valueSize": 32
+        },
+        "textMode": "value",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.1.4",
+      "targets": [
+        {
+          "dataset": "mesquita_publico",
+          "datasource": {
+            "type": "mysql",
+            "uid": "fegij8monp5ogb"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "select count(o.status) from mesquita_vendas.cad_orca o left outer join mesquita_publico.prod_clie pc on (pc.codigo = o.COD_PROD_OS) and (pc.cliente=o.cliente) left outer join mesquita_publico.cad_clie c on c.codigo = o.CLIENTE left outer join mesquita_publico.cad_status s on s.codigo = o.status left outer join mesquita_publico.cad_vend cd on o.usuario = cd.codigo left outer join mesquita_publico.cad_vend cd2 on o.vendedor = cd2.codigo where o.data_baixa between \"${Entre}\" and \"${e}\" and o.status=14 and o.situacao in (\"FI\",\"AI\") and o.tipo=3 and ${sqldepartamentos};",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          },
+          "table": "cad_vend"
+        }
+      ],
+      "transparent": true,
+      "type": "stat",
+      "title": "OS concluídas e baixadas"
+    }
+  ],
+  "refresh": "",
+  "schemaVersion": 39,
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "selected": false,
+          "text": "2025-06-01",
+          "value": "2025-06-01"
+        },
+        "hide": 0,
+        "name": "Entre",
+        "options": [
+          {
+            "selected": true,
+            "text": "2025-06-01",
+            "value": "2025-06-01"
+          }
+        ],
+        "query": "2025-06-01",
+        "skipUrlSync": false,
+        "type": "textbox"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "2025-12-25",
+          "value": "2025-12-25"
+        },
+        "hide": 0,
+        "name": "e",
+        "options": [
+          {
+            "selected": true,
+            "text": "2025-12-25",
+            "value": "2025-12-25"
+          }
+        ],
+        "query": "2025-12-25",
+        "skipUrlSync": false,
+        "type": "textbox"
+      },
+      {
+        "allValue": "",
+        "current": {
+          "selected": false,
+          "text": "( cd2.apelido rlike \"IMPRESSORA|NOTEBOOK|MICRO\" or pc.descricao rlike \"IMPRESSORA|NOTEBOOK|MICRO\" or o.destino_equip rlike \"IMPRESSORA|NOTEBOOK|MICRO\")",
+          "value": "( cd2.apelido rlike \"IMPRESSORA|NOTEBOOK|MICRO\" or pc.descricao rlike \"IMPRESSORA|NOTEBOOK|MICRO\" or o.destino_equip rlike \"IMPRESSORA|NOTEBOOK|MICRO\")"
+        },
+        "hide": 2,
+        "includeAll": false,
+        "multi": false,
+        "name": "sqldepartamentos",
+        "options": [
+          {
+            "selected": true,
+            "text": "( cd2.apelido rlike \"IMPRESSORA|NOTEBOOK|MICRO\" or pc.descricao rlike \"IMPRESSORA|NOTEBOOK|MICRO\" or o.destino_equip rlike \"IMPRESSORA|NOTEBOOK|MICRO\")",
+            "value": "( cd2.apelido rlike \"IMPRESSORA|NOTEBOOK|MICRO\" or pc.descricao rlike \"IMPRESSORA|NOTEBOOK|MICRO\" or o.destino_equip rlike \"IMPRESSORA|NOTEBOOK|MICRO\")"
+          }
+        ],
+        "query": "( cd2.apelido rlike \"${departamentos:pipe}\" or pc.descricao rlike \"${departamentos:pipe}\" or o.destino_equip rlike \"${departamentos:pipe}\")",
+        "queryValue": "",
+        "skipUrlSync": false,
+        "type": "custom"
+      },
+      {
+        "current": {
+          "selected": true,
+          "text": [
+            "IMPRESSORA",
+            "NOTEBOOK",
+            "MICRO"
+          ],
+          "value": [
+            "IMPRESSORA",
+            "NOTEBOOK",
+            "MICRO"
+          ]
+        },
+        "datasource": {
+          "type": "mysql",
+          "uid": "fegij8monp5ogb"
+        },
+        "definition": "select DISTINCT SUBSTRING_INDEX(apelido,'/',-1) from cad_vend where ativo=\"s\" and (apelido like \"%IMPRESSORA%\" or apelido like \"%MICRO%\" or apelido like \"%NOTEBOOK%\" or apelido like \"%RECEPCAO%\" or apelido like \"%SUP.TECNICA%\") and (depart=\"7\" or depart=\"37\" or depart=\"36\");",
+        "hide": 0,
+        "includeAll": false,
+        "label": "Departamentos",
+        "multi": true,
+        "name": "departamentos",
+        "options": [],
+        "query": "select DISTINCT SUBSTRING_INDEX(apelido,'/',-1) from cad_vend where ativo=\"s\" and (apelido like \"%IMPRESSORA%\" or apelido like \"%MICRO%\" or apelido like \"%NOTEBOOK%\" or apelido like \"%RECEPCAO%\" or apelido like \"%SUP.TECNICA%\") and (depart=\"7\" or depart=\"37\" or depart=\"36\");",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
+        "hide": 2,
+        "name": "select2",
+        "query": "select  concat(ROW_NUMBER() OVER (ORDER BY o.codigo), \"\\tOS: \", o.codigo,\"\\t  Cadastrado: \", o.data_cadastro, \" \\tPrevisao: \", o.previsao_entrega, \"\\t Total Srv: R$ \", o.total_servicos, \" \\tDias de atraso: \",MAX(DATEDIFF(CURDATE(), o.previsao_entrega)), \"\\tTec: \", cd2.apelido, \"\\t Cod.cli: \", o.cliente, \"   \\tNome: \",c.NOME , \"\\t\\t\\t\"),     o.CODIGO OS, concat(o.data_cadastro) CADASTRADO, concat(o.previsao_entrega) PREVISAO, MAX(DATEDIFF(CURDATE(), o.previsao_entrega)) as DIAS_DE_ATRASO, c.nome NOME, o.data_cadastro, pc.descricao EQUIPAMENTO, concat(o.TOTAL_PRODUTOS) TOTAL_PRODUTOS, concat(o.TOTAL_SERVICOS) TOTAL_SERVICOS, cd.apelido ABRIU_OS, cd2.apelido TECNICO, o.status STATUS, o.OBSERVACOES DEFEITO, \" \", o.OBSERVACOES2 SOLUCAO FROM mesquita_vendas.cad_orca o left outer join mesquita_publico.prod_clie pc on (pc.codigo = o.COD_PROD_OS) and (pc.cliente=o.cliente)  left outer join mesquita_publico.cad_clie c on c.codigo = o.CLIENTE  left outer join mesquita_publico.cad_status s on s.codigo = o.status  left outer join mesquita_publico.cad_vend cd on o.usuario = cd.codigo left outer join mesquita_publico.cad_vend cd2 on o.vendedor = cd2.codigo",
+        "skipUrlSync": false,
+        "type": "constant"
+      }
+    ]
+  },
+  "time": {
+    "from": "2024-04-22T00:00:00.000Z",
+    "to": "2025-02-27T00:00:00.000Z"
+  },
+  "timepicker": {
+    "hidden": true
+  },
+  "timezone": "browser",
+  "title": "OS em aberto por Departamento - RAFAEL ORGANIZADO IMPORT",
+  "version": 0,
+  "weekStart": ""
+}

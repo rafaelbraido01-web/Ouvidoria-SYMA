@@ -1,0 +1,9 @@
+{
+  "name": "ouvidoria-syma",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Protótipo local do Canal de Integridade e Ouvidoria SYMA",
+  "scripts": {
+    "start": "node server.js"
+  }
+}

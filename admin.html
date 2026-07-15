@@ -1,0 +1,57 @@
+﻿<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Gestão de Relatos | SYMA</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="admin.css" />
+  </head>
+  <body class="admin-body">
+    <div class="topline"></div>
+    <header class="admin-header">
+      <a class="brand" href="index.html" aria-label="Voltar ao Canal de Integridade SYMA">
+        <span class="brand-mark">S</span><span><strong>SYMA</strong><small>Gestão de relatos</small></span>
+      </a>
+      <div class="admin-header-actions"><span id="operator-name"></span><button id="logout" class="button button-quiet" type="button">Sair</button></div>
+    </header>
+
+    <main id="admin-app" class="admin-shell is-hidden">
+      <section class="admin-intro">
+        <div><p class="eyebrow">ACESSO RESTRITO</p><h1>Gestão de relatos</h1><p>Trate somente o necessário, preserve a confidencialidade e registre cada decisão relevante.</p></div>
+        <button id="refresh-reports" class="button button-light" type="button">Atualizar lista</button>
+      </section>
+      <section class="admin-warning"><strong>Ambiente demonstrativo:</strong> esta área usa dados do navegador e não deve ser usada para relatos reais ou acesso por múltiplas pessoas.</section>
+      <section class="admin-stats" aria-label="Resumo dos relatos">
+        <article><span>Recebidos</span><strong id="stat-received">0</strong></article>
+        <article><span>Em análise</span><strong id="stat-review">0</strong></article>
+        <article><span>Encaminhados</span><strong id="stat-forwarded">0</strong></article>
+        <article><span>Concluídos</span><strong id="stat-closed">0</strong></article>
+      </section>
+      <section class="admin-workspace">
+        <aside class="report-queue">
+          <div class="queue-toolbar"><h2>Relatos</h2><label class="sr-only" for="status-filter">Filtrar por status</label><select id="status-filter"><option value="Todos">Todos os status</option><option>Recebido</option><option>Em análise</option><option>Encaminhado</option><option>Concluído</option></select></div>
+          <div id="report-list" class="report-list" aria-live="polite"></div>
+        </aside>
+        <section id="report-detail" class="report-detail" aria-live="polite"><div class="empty-state"><h2>Selecione um relato</h2><p>A fila mostra os registros feitos neste navegador.</p></div></section>
+      </section>
+    </main>
+
+    <main id="login-view" class="login-view">
+      <section class="login-card">
+        <a class="brand" href="index.html"><span class="brand-mark">S</span><span><strong>SYMA</strong><small>Gestão de relatos</small></span></a>
+        <p class="eyebrow">ACESSO RESTRITO</p><h1>Área administrativa</h1><p>Use as credenciais de demonstração para conhecer o fluxo de tratamento.</p>
+        <form id="login-form" novalidate>
+          <label>Usuário<input id="login-user" autocomplete="username" required /></label>
+          <label>Senha<input id="login-password" type="password" autocomplete="current-password" required /></label>
+          <p id="login-error" class="form-error" role="alert"></p>
+          <button class="button button-primary" type="submit">Entrar na gestão</button>
+        </form>
+        <p class="login-hint"><strong>Para esta demonstração:</strong> usuário <code>admin</code> e senha <code>syma.local</code>.</p>
+        <p class="login-note">Em produção, estas credenciais não existirão: haverá contas individuais, MFA, permissão por função, trilha de auditoria e servidor seguro.</p>
+      </section>
+    </main>
+    <script src="admin.js"></script>
+  </body>
+</html>
