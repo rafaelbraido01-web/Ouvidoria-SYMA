@@ -15,22 +15,22 @@ function escapeHtml(value) {
 }
 
 function trackingStatusHelp(status) {
-  if (status === 'Recebido') return 'Seu relato foi registrado e aguarda triagem inicial da equipe responsável.';
-  if (status === 'Em análise') return 'O caso está em avaliação e pode gerar encaminhamentos internos conforme a necessidade.';
-  if (status === 'Encaminhado') return 'O relato já foi direcionado para tratamento com a área responsável.';
-  if (status === 'Concluído') return 'A etapa de tratamento registrada neste canal foi encerrada.';
-  return 'Há uma atualização registrada para o seu relato.';
+  if (status === 'Recebido') return 'Seu relato foi registrado e aguarda triagem inicial da equipe responsÃ¡vel.';
+  if (status === 'Em anÃ¡lise') return 'O caso estÃ¡ em avaliaÃ§Ã£o e pode gerar encaminhamentos internos conforme a necessidade.';
+  if (status === 'Encaminhado') return 'O relato jÃ¡ foi direcionado para tratamento com a Ã¡rea responsÃ¡vel.';
+  if (status === 'ConcluÃ­do') return 'A etapa de tratamento registrada neste canal foi encerrada.';
+  return 'HÃ¡ uma atualizaÃ§Ã£o registrada para o seu relato.';
 }
 
 function formatDate(value) {
-  if (!value) return 'Não disponível';
+  if (!value) return 'NÃ£o disponÃ­vel';
   const date = new Date(value);
   return Number.isNaN(date.getTime()) ? value : date.toLocaleString('pt-BR');
 }
 
 function renderTrackingHistory(history) {
   return history.slice().reverse().map((event) => {
-    const statusText = event.status ? `<strong>${escapeHtml(event.status)}</strong>` : '<strong>Atualização</strong>';
+    const statusText = event.status ? `<strong>${escapeHtml(event.status)}</strong>` : '<strong>AtualizaÃ§Ã£o</strong>';
     return `<li><div><span>${statusText}</span><p>${escapeHtml(event.text)}</p></div><small>${escapeHtml(formatDate(event.at))}</small></li>`;
   }).join('');
 }
@@ -41,15 +41,15 @@ function fillTrackingPanel(report) {
   statusTag.textContent = report.status || 'Recebido';
   statusTag.className = `status-pill ${`status-${(report.status || 'Recebido').replaceAll(' ', '-')}`}`;
   document.querySelector('#tracking-created-at').textContent = formatDate(report.createdAt);
-  document.querySelector('#tracking-category').textContent = report.category || 'Não informado';
-  document.querySelector('#tracking-area').textContent = report.area || 'Não informado';
-  document.querySelector('#tracking-identity').textContent = report.anonymous ? 'Relato anônimo' : 'Relato identificado';
+  document.querySelector('#tracking-category').textContent = report.category || 'NÃ£o informado';
+  document.querySelector('#tracking-area').textContent = report.area || 'NÃ£o informado';
+  document.querySelector('#tracking-identity').textContent = report.anonymous ? 'Relato anÃ´nimo' : 'Relato identificado';
   document.querySelector('#tracking-status-text').textContent = report.status || 'Recebido';
   document.querySelector('#tracking-status-help').textContent = trackingStatusHelp(report.status || 'Recebido');
-  document.querySelector('#tracking-ongoing-title').textContent = report.ongoing ? 'Situação ainda pode estar ocorrendo' : 'Sem indicação de continuidade';
+  document.querySelector('#tracking-ongoing-title').textContent = report.ongoing ? 'SituaÃ§Ã£o ainda pode estar ocorrendo' : 'Sem indicaÃ§Ã£o de continuidade';
   document.querySelector('#tracking-ongoing-text').textContent = report.ongoing
-    ? 'O relato foi marcado com possibilidade de continuidade. A equipe deve priorizar a avaliação do risco informado.'
-    : 'No envio deste relato não foi sinalizado risco de continuidade na situação descrita.';
+    ? 'O relato foi marcado com possibilidade de continuidade. A equipe deve priorizar a avaliaÃ§Ã£o do risco informado.'
+    : 'No envio deste relato nÃ£o foi sinalizado risco de continuidade na situaÃ§Ã£o descrita.';
   document.querySelector('#tracking-history').innerHTML = renderTrackingHistory(report.history || []);
   trackingPanel.classList.remove('is-hidden');
 }
@@ -61,7 +61,7 @@ async function postJson(url, payload) {
     body: JSON.stringify(payload)
   });
   const data = await response.json().catch(() => ({}));
-  if (!response.ok) throw new Error(data.error || 'Falha na comunicação com o servidor.');
+  if (!response.ok) throw new Error(data.error || 'Falha na comunicaÃ§Ã£o com o servidor.');
   return data;
 }
 
@@ -79,7 +79,7 @@ reportForm.addEventListener('submit', async (event) => {
     const description = data.get('description').trim();
 
     if (!data.get('category') || description.length < 20 || !data.get('consent')) {
-      throw new Error('Revise os campos obrigatórios e descreva o ocorrido com pelo menos 20 caracteres.');
+      throw new Error('Revise os campos obrigatÃ³rios e descreva o ocorrido com pelo menos 20 caracteres.');
     }
 
     const result = await postJson('/api/reports', {
@@ -113,7 +113,7 @@ document.querySelector('#tracking-form').addEventListener('submit', async (event
 
   try {
     const data = await postJson('/api/reports/track', { protocol, accessKey });
-    result.textContent = `Relato localizado. Veja abaixo a situação atual e o histórico do protocolo ${data.report.protocol}.`;
+    result.textContent = `Relato localizado. Veja abaixo a situaÃ§Ã£o atual e o histÃ³rico do protocolo ${data.report.protocol}.`;
     result.classList.add('found');
     fillTrackingPanel(data.report);
   } catch (error) {
