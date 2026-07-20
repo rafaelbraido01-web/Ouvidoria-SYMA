@@ -73,7 +73,7 @@ function hashAccessKey(accessKey) {
 }
 
 function createAdminToken(username) {
-  const secret = process.env.ADMIN_SESSION_SECRET || getEnv('SUPABASE_SERVICE_ROLE_KEY');
+  const secret = getEnv('ADMIN_SESSION_SECRET');
   const payload = JSON.stringify({ username, exp: Date.now() + 1000 * 60 * 60 * 8 });
   const base64 = Buffer.from(payload, 'utf8').toString('base64url');
   const signature = crypto.createHmac('sha256', secret).update(base64).digest('base64url');
@@ -83,7 +83,7 @@ function createAdminToken(username) {
 function verifyAdminToken(token) {
   if (!token || !token.includes('.')) return null;
   const [base64, signature] = token.split('.');
-  const secret = process.env.ADMIN_SESSION_SECRET || getEnv('SUPABASE_SERVICE_ROLE_KEY');
+  const secret = getEnv('ADMIN_SESSION_SECRET');
   const expected = crypto.createHmac('sha256', secret).update(base64).digest('base64url');
   if (signature !== expected) return null;
   const payload = JSON.parse(Buffer.from(base64, 'base64url').toString('utf8'));
@@ -129,6 +129,7 @@ module.exports = {
   generateAccessKey,
   generateProtocol,
   getBearerToken,
+  getEnv,
   hashAccessKey,
   json,
   normalizeReport,

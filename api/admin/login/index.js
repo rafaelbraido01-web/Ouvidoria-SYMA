@@ -2,8 +2,23 @@ const {
   allowCors,
   createAdminToken,
   json,
-  readJson
+  readJson,
+  getEnv
 } = require('../../_lib');
+
+function getAllowedAdminUsers() {
+  const raw = process.env.ADMIN_ALLOWED_USERS || process.env.ADMIN_USERNAME || '';
+  const users = raw
+    .split(',')
+    .map((value) => value.trim())
+    .filter(Boolean);
+
+  if (!users.length) {
+    throw new Error('Missing environment variable: ADMIN_ALLOWED_USERS or ADMIN_USERNAME');
+  }
+
+  return new Set(users);
+}
 
 module.exports = async (request, response) => {
   if (allowCors(request, response)) return;
@@ -13,11 +28,11 @@ module.exports = async (request, response) => {
     const body = await readJson(request);
     const username = String(body.username || '').trim();
     const password = String(body.password || '');
-    const expectedUser = process.env.ADMIN_USERNAME || 'admin';
-    const expectedPassword = process.env.ADMIN_PASSWORD || 'syma.local';
+    const allowedUsers = getAllowedAdminUsers();
+    const expectedPassword = getEnv('ADMIN_PASSWORD');
 
-    if (username !== expectedUser || password !== expectedPassword) {
-      return json(response, 401, { error: 'Credenciais de demonstração inválidas.' });
+    if (!allowedUsers.has(username) || password !== expectedPassword) {
+      return json(response, 401, { error: 'Credenciais administrativas inválidas.' });
     }
 
     return json(response, 200, {
