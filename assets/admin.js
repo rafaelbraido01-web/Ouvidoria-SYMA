@@ -111,7 +111,7 @@ async function refresh() {
     if (/Sessão administrativa inválida/.test(error.message)) {
       sessionStorage.removeItem(adminSessionKey);
       selectedProtocol = null;
-      showAdmin();
+      window.location.reload();
       return;
     }
     reportList.innerHTML = `<div class="empty-state"><h2>Falha ao carregar</h2><p>${escapeHtml(error.message)}</p></div>`;
@@ -165,7 +165,7 @@ document.querySelector('#login-form').addEventListener('submit', async (event) =
       body: JSON.stringify({ username, password })
     });
     sessionStorage.setItem(adminSessionKey, data.token);
-    showAdmin();
+    window.location.reload();
   } catch (requestError) {
     error.textContent = requestError.message;
   }
