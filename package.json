@@ -5,5 +5,8 @@
   "description": "Prototipo do Canal de Integridade e Ouvidoria SYMA com frontend estatico e API na Vercel",
   "scripts": {
     "start": "node server.js"
+  },
+  "dependencies": {
+    "@vercel/functions": "^3.7.5"
   }
 }
