@@ -4,6 +4,7 @@ const {
   generateProtocol,
   hashAccessKey,
   json,
+  triggerNewReportWebhook,
   readJson,
   supabaseFetch
 } = require('../_lib');
@@ -53,6 +54,11 @@ module.exports = async (request, response) => {
       })
     });
 
+    try {
+      await triggerNewReportWebhook();
+    } catch (error) {
+      console.error('New report webhook failed', { message: error.message });
+    }
     return json(response, 201, { protocol, accessKey });
   } catch (error) {
     return json(response, 500, { error: 'Não foi possível registrar o relato agora.', details: error.message });

@@ -31,6 +31,19 @@ function getEnv(name) {
   return value;
 }
 
+async function triggerNewReportWebhook() {
+  const response = await fetch(getEnv('N8N_NEW_REPORT_WEBHOOK_URL'), {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ event: 'new_report' })
+  });
+
+  if (!response.ok) {
+    throw new Error(`New report webhook failed: ${response.status}`);
+  }
+}
 function getSupabaseConfig() {
   return {
     url: getEnv('SUPABASE_URL'),
@@ -132,6 +145,7 @@ module.exports = {
   getEnv,
   hashAccessKey,
   json,
+  triggerNewReportWebhook,
   normalizeReport,
   readJson,
   supabaseFetch,
