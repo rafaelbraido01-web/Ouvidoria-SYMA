@@ -127,7 +127,19 @@ document.querySelector('#tracking-form').addEventListener('submit', async (event
   }
 });
 
-function closeDialog() { dialog.close(); }
+let allowDialogClose = false;
+
+function closeDialog() {
+  allowDialogClose = true;
+  dialog.close();
+}
+
 document.querySelector('#close-dialog').addEventListener('click', closeDialog);
-document.querySelector('#done-dialog').addEventListener('click', closeDialog);
-dialog.addEventListener('click', (event) => { if (event.target === dialog) closeDialog(); });
+dialog.addEventListener('cancel', (event) => event.preventDefault());
+dialog.addEventListener('click', (event) => {
+  if (event.target === dialog) event.preventDefault();
+});
+dialog.addEventListener('close', () => {
+  if (!allowDialogClose) dialog.showModal();
+  allowDialogClose = false;
+});
